@@ -6,10 +6,25 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXFileReference section */
+		042FF52E1C568ADB00926731 /* source */ = {isa = PBXFileReference; lastKnownFileType = folder; path = source; sourceTree = "<group>"; };
+		042FF52F1C568ADB00926731 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		042FF5301C568ADB00926731 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		042FF5311C568ADB00926731 /* 3DSTerm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = 3DSTerm.hpp; sourceTree = "<group>"; };
+		042FF5321C568ADB00926731 /* Adventure3DS Base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Adventure3DS Base.cpp"; sourceTree = "<group>"; };
+		042FF5331C568ADB00926731 /* sample.dspt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.dspt; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		042FF5231C568A0400926731 = {
 			isa = PBXGroup;
 			children = (
+				042FF52E1C568ADB00926731 /* source */,
+				042FF52F1C568ADB00926731 /* src */,
+				042FF5301C568ADB00926731 /* Makefile */,
+				042FF5311C568ADB00926731 /* 3DSTerm.hpp */,
+				042FF5321C568ADB00926731 /* Adventure3DS Base.cpp */,
+				042FF5331C568ADB00926731 /* sample.dspt */,
 			);
 			sourceTree = "<group>";
 		};
@@ -23,6 +38,7 @@
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = ./;
 			dependencies = (
 			);
 			name = 3DSTerm;
@@ -138,6 +154,8 @@
 			buildSettings = {
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVKITARM = "$(DEVKITPRO)/devkitARM";
+				DEVKITPRO = /opt/devkitPro;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				OTHER_CFLAGS = "";
@@ -150,6 +168,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVKITARM = "$(DEVKITPRO)/devkitARM";
+				DEVKITPRO = /opt/devkitPro;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
