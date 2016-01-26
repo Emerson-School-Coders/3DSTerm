@@ -35,6 +35,24 @@ std::tuple<u32, u32, u32> dsIn() {
 }
 
 bool isButtonPressed(char button, bool wait = true) {
+    /*
+     The letter mappings:
+     'a' = A
+     'b' = B
+     'x' = X
+     'y' = Y
+     't' = Start
+     'e' = Select
+     'l' = Left
+     'r' = Right
+     'u' = Up (Circle Pad or D-Pad)
+     'd' = Down
+     'q' = Left
+     'e' = Right
+     On New 3DS:
+     'c' = ZR
+     'z' = ZL
+     */
 	std::tuple<u32, u32, u32> input = dsIn();
 	u32 kDown = std::get<0>(input);
 	u32 kHeld = std::get<1>(input);
