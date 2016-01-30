@@ -35,29 +35,13 @@ std::tuple<u32, u32, u32> dsIn() {
 }
 
 bool isButtonPressed(char button, bool wait = true) {
-    /*
-     The letter mappings:
-     'a' = A
-     'b' = B
-     'x' = X
-     'y' = Y
-     't' = Start
-     'e' = Select
-     'l' = Left
-     'r' = Right
-     'u' = Up (Circle Pad or D-Pad)
-     'd' = Down
-     'q' = Left
-     'e' = Right
-     On New 3DS:
-     'c' = ZR
-     'z' = ZL
-     */
-	std::tuple<u32, u32, u32> input = dsIn();
-	u32 kDown = std::get<0>(input);
-	u32 kHeld = std::get<1>(input);
-	u32 kUp	  = std::get<2>(input);
-	while (!kDown && wait) {hidScanInput(); u32 kDown = hidKeysDown(); u32 kHeld = hidKeysHeld(); u32 kUp = hidKeysUp();}
+	APT_CheckNew3DS(&consoletype);
+	if (wait) hidWaitForEvent(HIDEVENT_PAD0, false);
+	hidScanInput();
+	u32 kDown = hidKeysDown();
+	u32 kHeld = hidKeysHeld();
+	u32 kUp = hidKeysUp();
+	if (!kDown && kHeld) kDown = kHeld;
 	if (kDown && KEY_A && button == 'a') return 0;
 	else if (kDown && KEY_B && button == 'b') return 0;
 	else if (kDown && KEY_X && button == 'x') return 0;
@@ -84,196 +68,203 @@ bool input(std::string text = "") {
 	printf("\n");
 	return retval;
 }
-std::map<int, std::map<int, char> > char_low = {
-    {2, {
-        {2, '`'},
-        {6, '1'},
-        {10, '2'},
-        {14, '3'},
-        {18, '4'},
-        {22, '5'},
-        {26, '6'},
-        {30, '7'},
-        {34, '8'},
-        {38, '9'},
-        {42, '0'},
-        {46, '-'},
-        {50, '='},
-    }},
-    {4, {
+std::map<int, char> char_low_2 = {
+        {1, '`'},
+        {4, '1'},
+        {7, '2'},
+        {9, '3'},
+        {12, '4'},
+        {15, '5'},
+        {17, '6'},
+        {20, '7'},
+        {23, '8'},
+        {25, '9'},
+        {28, '0'},
+        {31, '-'},
+        {33, '='}};
+std::map<int, char> char_low_4 = {
         {8, 'q'},
-        {12, 'w'},
-        {16, 'e'},
-        {20, 'r'},
-        {24, 't'},
-        {28, 'y'},
-        {32, 'u'},
-        {36, 'i'},
-        {40, 'o'},
-        {44, 'p'},
-        {48, '['},
-        {52, ']'},
-        {56, '\\'},
-    }},
-    {6, {
-        {11, 'a'},
-        {15, 's'},
-        {19, 'd'},
-        {23, 'f'},
-        {27, 'g'},
-        {31, 'h'},
-        {35, 'j'},
-        {39, 'k'},
-        {43, 'l'},
-        {47, ';'},
-        {51, '\''},
-    }},
-    {8, {
-        {12, 'z'},
-        {16, 'x'},
-        {20, 'c'},
-        {24, 'v'},
-        {28, 'b'},
-        {32, 'n'},
-        {36, 'm'},
-        {40, ','},
-        {44, '.'},
-        {48, '/'},
-    }}
-};
-std::map<int, std::map<int, char> > char_up = {
-    {2, {
-        {2, '~'},
-        {6, '!'},
-        {10, '@'},
-        {14, '#'},
-        {18, '$'},
-        {22, '%'},
-        {26, '^'},
-        {30, '&'},
-        {34, '*'},
-        {38, '('},
-        {42, ')'},
-        {46, '_'},
-        {50, '+'},
-    }},
-    {4, {
+        {11, 'w'},
+        {13, 'e'},
+        {16, 'r'},
+        {18, 't'},
+        {21, 'y'},
+        {24, 'u'},
+        {27, 'i'},
+        {30, 'o'},
+        {32, 'p'},
+        {35, '['},
+        {37, ']'},
+        {40, '\\'}};
+std::map<int, char> char_low_6 = {
+        {9, 'a'},
+        {12, 's'},
+        {15, 'd'},
+        {17, 'f'},
+        {20, 'g'},
+        {23, 'h'},
+        {25, 'j'},
+        {28, 'k'},
+        {31, 'l'},
+        {33, ';'},
+        {36, '\''}};
+std::map<int, char> char_low_8 = {
+        {9, 'z'},
+        {12, 'x'},
+        {15, 'c'},
+        {17, 'v'},
+        {20, 'b'},
+        {23, 'n'},
+        {25, 'm'},
+        {28, ','},
+        {31, '.'},
+        {33, '/'}};
+std::map<int, char> char_up_2 = {
+        {1, '~'},
+        {4, '!'},
+        {7, '@'},
+        {9, '#'},
+        {12, '$'},
+        {15, '%'},
+        {17, '^'},
+        {20, '&'},
+        {23, '*'},
+        {25, '('},
+        {28, ')'},
+        {31, '_'},
+        {33, '+'}};
+std::map<int, char> char_up_4 = {
         {8, 'Q'},
-        {12, 'W'},
-        {16, 'E'},
-        {20, 'R'},
-        {24, 'T'},
-        {28, 'Y'},
-        {32, 'U'},
-        {36, 'I'},
-        {40, 'O'},
-        {44, 'P'},
-        {48, '{'},
-        {52, '}'},
-        {56, '|'},
-    }},
-    {6, {
-        {11, 'A'},
-        {15, 'S'},
-        {19, 'D'},
-        {23, 'F'},
-        {27, 'G'},
-        {31, 'H'},
-        {35, 'J'},
-        {39, 'K'},
-        {43, 'L'},
-        {47, ':'},
-        {51, '\"'},
-    }},
-    {8, {
-        {12, 'Z'},
-        {16, 'X'},
-        {20, 'C'},
-        {24, 'V'},
-        {28, 'B'},
-        {32, 'N'},
-        {36, 'M'},
-        {40, '<'},
-        {44, '>'},
-        {48, '?'},
-    }}
+        {11, 'W'},
+        {13, 'E'},
+        {16, 'R'},
+        {18, 'T'},
+        {21, 'Y'},
+        {24, 'U'},
+        {27, 'I'},
+        {30, 'O'},
+        {32, 'P'},
+        {35, '{'},
+        {37, '}'},
+        {40, '|'}};
+std::map<int, char> char_up_6 = {
+        {9, 'A'},
+        {12, 'S'},
+        {15, 'D'},
+        {17, 'F'},
+        {20, 'G'},
+        {23, 'H'},
+        {25, 'J'},
+        {28, 'K'},
+        {31, 'L'},
+        {33, ':'},
+        {36, '\"'}};
+std::map<int, char> char_up_8 = {
+        {9, 'Z'},
+        {12, 'X'},
+        {15, 'C'},
+        {17, 'V'},
+        {20, 'B'},
+        {23, 'N'},
+        {25, 'M'},
+        {28, '<'},
+        {31, '>'},
+        {33, '?'}};
+std::map<int, char> char_locs_nil = {
+	{0, '0'}
 };
 std::string keyboardLow = "\
------------------------------------------------------------\n\
-| ` | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 | - | = | del |\n\
-|---------------------------------------------------------|\n\
-|     | q | w | e | r | t | y | u | i | o | p | [ | ] | \\ |\n\
-|---------------------------------------------------------|\n\
-|o caps | a | s | d | f | g | h | j | k | l | ; | \' | ret |\n\
-|---------------------------------------------------------|\n\
-| shift  | z | x | c | v | b | n | m | , | . | / |  shift |\n\
-|---------------------------------------------------------|\n\
-| fn | cn | alt | ds |                   | ds | alt | cn  |\n\
------------------------------------------------------------";
-std::string keyboardUp = "\
------------------------------------------------------------\n\
-| ~ | ! | @ | # | $ | % | ^ | & | * | ( | ) | _ | + | del |\n\
-|---------------------------------------------------------|\n\
-|     | Q | W | E | R | T | Y | U | I | O | P | { | } | | |\n\
-|---------------------------------------------------------|\n\
-|I caps | A | S | D | F | G | H | J | K | L | : | \" | ret |\n\
-|---------------------------------------------------------|\n\
-| shift  | Z | X | C | V | B | N | M | < | > | ? |  shift |\n\
-|---------------------------------------------------------|\
-| fn | cn | alt | ds |                   | ds | alt | cn  |\n\
------------------------------------------------------------";
+---------------------------------\n\
+|`|1|2|3|4|5|6|7|8|9|0|-|=| del |\n\
+|-------------------------------|\n\
+|    |q|w|e|r|t|y|u|i|o|p|[|]|\\|\n\
+|-------------------------------|\n\
+|ocaps|a|s|d|f|g|h|j|k|l|;|\'|ret|\n\
+|-------------------------------|\n\
+|shift|z|x|c|v|b|n|m|,|.|/|shift|\n\
+|-------------------------------|\n\
+|             space             |\n\
+---------------------------------";
+std::string keyboardUp="\
+---------------------------------\n\
+|~|!|@|#|$|%|^|&|*|(|)|_|+| del |\n\
+|-------------------------------|\n\
+|     |Q|W|E|R|T|Y|U|I|O|P|{|}|||\n\
+|-------------------------------|\n\
+|Icaps|A|S|D|F|G|H|J|K|L|:|\"|ret|\n\
+|-------------------------------|\n\
+|shift|Z|X|C|V|B|N|M|<|>|?|shift|\n\
+|-------------------------------|\
+|             space             |\n\
+---------------------------------";
 bool intBetween(int number, int min, int max) {
     if (number >= min && number <= max) return true;
     else return false;
 }
 char getChar(int caps_stat) {
+	hidScanInput();
     touchPosition touch;
-    hidTouchRead(&touch);
-    int keyX = touch.x / 6;
-    int keyY = touch.y / 6;
-    if (caps_stat == 0) std::map<int, std::map<int, char> > char_locs = char_low;
-    else std::map<int, std::map<int, char> > char_locs = char_up;
-    try char typedKey = char_locs[keyY][keyX];
-    catch (const std::out_of_range& oor) {
-        try char typedKey = char_locs[keyY][keyX + 1];
-        catch (const std::out_of_range& oor) {
-            try char typedKey = char_locs[keyY][keyX - 1];
-            catch (const std::out_of_range& oor) {
-                if (keyY == 2 && intBetween(keyX, 53, 57)) typedKey = '\x10';
+	s16 keyX, keyY, touchX, touchY = 0;
+	do {
+	//printf("touchX: %d\tkeyX: %d\ttouchY: %d\tkeyY: %d\n", touchX, keyX, touchY, keyY);
+	hidScanInput();
+	hidTouchRead(&touch);
+	touchX = touch.px;
+	touchY = touch.py;
+    keyX = touchX / 6;
+    keyY = (touchY - 4) / 6;
+                if (keyY == 2 && intBetween(keyX, 36, 42)) {/*printf("2"); usleep(1000000); printf("\b");*/ if (caps == 0) return 'E'; else return 'e';}
                 else if (keyY == 6) {
-                    if (intBetween(keyX, 2, 8)) caps = 1;
-                    else if (intBetween(keyX, 54, 58)) typedKey = '\x11';
+					//printf("6"); usleep(1000000); printf("\b");
+                    if (intBetween(keyX, 1, 7)) {caps = 1; return '\0';}
+                    else if (intBetween(keyX, 38, 42)) {if (caps == 0) return '!'; else return '1';}
                 }
-                else if (keyY == 8) {
-                    if (intBetween(keyX, 2, 9) || intBetween(keyX, 51, 58)) caps = 2;
+                else if (keyY == 9) {
+					//printf("9"); usleep(1000000); printf("\b");
+                    if (intBetween(keyX, 1, 7) || intBetween(keyX, 36, 42)) {caps = 2; return '\0';}
                 }
-                else if (keyY == 10) {
-                    if (intBetween(keyX, 2, 5)) typedKey = '\x12';
-                    else if (intBetween(keyX, 7, 10)) typedKey = '\x13';
-                    else if (intBetween(keyX, 12, 16)) typedKey = '\x14';
-                    else if (intBetween(keyX, 18, 21)) typedKey = '\x15';
-                    else if (intBetween(keyX, 23, 41)) typedKey = ' ';
-                    else if (intBetween(keyX, 43, 46)) typedKey = '\x15';
-                    else if (intBetween(keyX, 48, 52)) typedKey = '\x14';
-                    else if (intBetween(keyX, 54, 58)) typedKey = '\x13';
-                }
-            }
-        }
+	//else if (kDown && KEY_X) {if (caps == 0) return 'B'; else return 'b';}
+	//else if (kDown && KEY_START) {if (caps == 0) return 'D'; else return 'd';}
+	} while (touchX == 0 && touchY == 0);
+	//printf("touchX: %d\tkeyX: %d\ttouchY: %d\tkeyY: %d\n", touchX, keyX, touchY, keyY);
+	std::map<int, char> char_locs_2, char_locs_4, char_locs_6, char_locs_8;
+    if (caps_stat == 0) {char_locs_2 = char_low_2; char_locs_4 = char_low_4; char_locs_6 = char_low_6; char_locs_8 = char_low_8;}
+    else {char_locs_2 = char_up_2; char_locs_4 = char_up_4; char_locs_6 = char_up_6; char_locs_8 = char_up_8;}
+	char typedKey;
+	bool invalid = flase;
+    try {
+		if (keyY == 2) typedKey = char_locs_2[keyX];
+		else if (keyY == 4) typedKey = char_locs_4[keyX];
+		else if (keyY == 6) typedKey = char_locs_6[keyX];
+		else if (keyY == 9) typedKey = char_locs_8[keyX];
+		else if (keyY == 12) typedKey = ' ';
+		else typedKey = char_locs_nil[keyX];
+	}
+    catch (const std::out_of_range& oor) {
+		//printf("Invalid key. keyX: %d\tkeyY: %d\n", keyX, keyY); invalid=true;
     }
+		/*if (keyY == 2) {printf("2"); usleep(1000000); printf("\b");}
+		else if (keyY == 4) {printf("4"); usleep(1000000); printf("\b");}
+		else if (keyY == 6) {printf("6"); usleep(1000000); printf("\b");}
+		else if (keyY == 9) {printf("9"); usleep(1000000); printf("\b");}*/
+	
+	/*if (!invalid) {printf("%c", typedKey);
+	usleep(1000000);
+	printf("\b");}*/
     if (caps_stat == 2) {
         caps = 0;
         clk();
-        printf(keyboardLow);
-        consoleSelect(&console)
+        printf(keyboardLow.c_str());
+        consoleSelect(&console);
     }
     if (caps == 1 && caps_stat == 0) {
         clk();
-        printf(keyboardUp);
+        printf(keyboardUp.c_str());
         consoleSelect(&console);
     }
     if (caps == 2) {
         clk();
-        printf(keyboardUp);
+        printf(keyboardUp.c_str());
         consoleSelect(&console);
     }
     return typedKey;
