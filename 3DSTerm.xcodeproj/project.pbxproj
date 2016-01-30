@@ -10,7 +10,7 @@
 		042FF52E1C568ADB00926731 /* source */ = {isa = PBXFileReference; lastKnownFileType = folder; path = source; sourceTree = "<group>"; };
 		042FF5301C568ADB00926731 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		042FF5311C568ADB00926731 /* 3DSTerm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = 3DSTerm.hpp; sourceTree = "<group>"; };
-		0465F1E11C5D29F200DB43AB /* 3DSTerm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3DSTerm.png; sourceTree = "<group>"; };
+		0465F1E11C5D29F200DB43AB /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		8646DB0B1C56A12900BC3000 /* Program.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Program.cpp; path = Programs/Program.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -20,7 +20,7 @@
 			children = (
 				042FF52E1C568ADB00926731 /* source */,
 				042FF5301C568ADB00926731 /* Makefile */,
-				0465F1E11C5D29F200DB43AB /* 3DSTerm.png */,
+				0465F1E11C5D29F200DB43AB /* icon.png */,
 				042FF5311C568ADB00926731 /* 3DSTerm.hpp */,
 				8646DB0A1C56A0D800BC3000 /* Programs */,
 			);
