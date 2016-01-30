@@ -19,6 +19,7 @@
 PrintConsole console, keyboard;
 bool flase = false; //failsafe
 int caps = 0;   // 0 means lowercase, 1 means caps lock, 2 means shift
+u8 consoletype;
 void cls() {
     consoleSelect(&console);
     consoleClear();
